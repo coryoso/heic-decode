@@ -53,7 +53,7 @@ const decodeImage = async (image: any) => {
   return { width, height, data: arrayBuffer };
 };
 
-export const decodeBuffer = async ({
+const decodeBuffer = async ({
   buffer,
   all,
 }: {
@@ -82,3 +82,5 @@ export const decodeBuffer = async ({
     };
   });
 };
+
+export default decodeBuffer;
