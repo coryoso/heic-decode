@@ -32,28 +32,35 @@ export const isHeic = (buffer: Buffer) => {
   return false;
 };
 
-const decodeImage = async (image: any) => {
+type HeicImageData = { width: number; height: number; data: ArrayBuffer };
+
+const decodeImage = async (image: any): Promise<HeicImageData> => {
   const width = image.get_width();
   const height = image.get_height();
 
-  const arrayBuffer = await new Promise((resolve, reject) => {
-    image.display(
-      { data: new Uint8ClampedArray(width * height * 4), width, height },
-      (displayData: { data: { buffer: unknown } }) => {
-        if (!displayData) {
-          return reject(new Error("HEIF processing error"));
-        }
+  const arrayBuffer = await new Promise(
+    (resolve: (value: ArrayBuffer) => void, reject: (error: Error) => void) => {
+      image.display(
+        { data: new Uint8ClampedArray(width * height * 4), width, height },
+        (displayData: { data: { buffer: ArrayBuffer } }) => {
+          if (!displayData) {
+            return reject(new Error("HEIF processing error"));
+          }
 
-        // get the ArrayBuffer from the Uint8Array
-        resolve(displayData.data.buffer);
-      }
-    );
-  });
+          // get the ArrayBuffer from the Uint8Array
+          resolve(displayData.data.buffer);
+        }
+      );
+    }
+  );
 
   return { width, height, data: arrayBuffer };
 };
 
-const decodeBuffer = async (buffer: Buffer, all: boolean = false) => {
+const decodeBuffer = async (
+  buffer: Buffer,
+  all: boolean = false
+): Promise<HeicImageData | HeicImageData[]> => {
   if (!isHeic(buffer)) {
     throw new TypeError("input buffer is not a HEIC image");
   }
