@@ -32,7 +32,11 @@ export const isHeic = (buffer: Buffer) => {
   return false;
 };
 
-type HeicImageData = { width: number; height: number; data: ArrayBuffer };
+export type HeicImageData = {
+  width: number;
+  height: number;
+  data: ArrayBuffer;
+};
 
 const decodeImage = async (image: any): Promise<HeicImageData> => {
   const width = image.get_width();
