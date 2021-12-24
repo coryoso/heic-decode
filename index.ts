@@ -35,7 +35,7 @@ export const isHeic = (buffer: Buffer) => {
 export type HeicImageData = {
   width: number;
   height: number;
-  data: ArrayBuffer;
+  data: Buffer;
 };
 
 const decodeImage = async (image: any): Promise<HeicImageData> => {
@@ -43,10 +43,10 @@ const decodeImage = async (image: any): Promise<HeicImageData> => {
   const height = image.get_height();
 
   const arrayBuffer = await new Promise(
-    (resolve: (value: ArrayBuffer) => void, reject: (error: Error) => void) => {
+    (resolve: (value: Buffer) => void, reject: (error: Error) => void) => {
       image.display(
         { data: new Uint8ClampedArray(width * height * 4), width, height },
-        (displayData: { data: { buffer: ArrayBuffer } }) => {
+        (displayData: { data: { buffer: Buffer } }) => {
           if (!displayData) {
             return reject(new Error("HEIF processing error"));
           }
