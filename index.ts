@@ -53,13 +53,7 @@ const decodeImage = async (image: any) => {
   return { width, height, data: arrayBuffer };
 };
 
-const decodeBuffer = async ({
-  buffer,
-  all,
-}: {
-  buffer: Buffer;
-  all: boolean;
-}) => {
+const decodeBuffer = async (buffer: Buffer, all: boolean = false) => {
   if (!isHeic(buffer)) {
     throw new TypeError("input buffer is not a HEIC image");
   }
